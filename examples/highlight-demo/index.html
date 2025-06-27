@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Highlight Demo</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input { margin-right: 8px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import { highlightLinks } from '../../dist/index.js';
+
+    const { useState } = React;
+
+    function App() {
+      const [key, setKey] = useState('');
+      const [message, setMessage] = useState('');
+
+      async function handleSubmit() {
+        if (!key) {
+          alert('Enter API key');
+          return;
+        }
+        setMessage('Loading...');
+        try {
+          const res = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + key
+            },
+            body: JSON.stringify({
+              model: 'gpt-3.5-turbo',
+              messages: [{ role: 'user', content: 'Say hello' }]
+            })
+          });
+          const data = await res.json();
+          setMessage(data.choices?.[0]?.message?.content || 'No response');
+          highlightLinks({ path: '/foo' });
+        } catch (err) {
+          setMessage('Request failed: ' + err.message);
+        }
+      }
+
+      return React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'p',
+          null,
+          React.createElement('input', {
+            type: 'password',
+            placeholder: 'OpenAI API Key',
+            value: key,
+            onChange: e => setKey(e.target.value)
+          }),
+          React.createElement(
+            'button',
+            { onClick: handleSubmit },
+            'Send'
+          )
+        ),
+        React.createElement('p', null, message),
+        React.createElement(
+          'p',
+          null,
+          'Some ',
+          React.createElement('a', { href: '/foo' }, 'foo link'),
+          ' and ',
+          React.createElement('a', { href: '/bar' }, 'bar link'),
+          '.'
+        )
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+  </script>
+</body>
+</html>
