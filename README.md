@@ -21,6 +21,7 @@ const { messages, handleInputChange, handleSubmit } = useInstrumentedChat();
 The wrapper injects the required `onToolCall` handler and applies DOM updates in the browser. No configuration is needed for the basic highlight tool.
 
 Additional recipes demonstrating real integrations can be found under the [`cookbook`](./cookbook) directory.
+For a quick demonstration of the highlight tool open [`examples/highlight-demo`](./examples/highlight-demo) with `npm run demo`.
 
 ## Development
 
