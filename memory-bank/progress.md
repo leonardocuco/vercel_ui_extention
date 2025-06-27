@@ -9,3 +9,7 @@ This log summarises the main repository milestones and serves as a history of ho
 - Created a unit test suite verifying the highlight logic and hook integration.
 - Wrote the first cookbook entry showing how to use the wrapper in a basic setup.
 - Configured a GitHub Actions workflow to run `npm ci`, `npm run build`, and `npm test` for every pull request.
+
+## 2025-06-28
+- Adjusted the CI workflow to skip `npm install` because dependencies are checked
+  into version control. This prevents network failures during automated tests.
